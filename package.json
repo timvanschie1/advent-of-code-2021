@@ -1,0 +1,30 @@
+{
+  "name": "advent-of-code-2021",
+  "version": "1.0.0",
+  "description": "see https://adventofcode.com/2021/",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "@babel/preset-env": "^7.12.7",
+    "@jest/globals": "^26.6.2",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "jest --silent"
+  },
+  "jest": {
+    "verbose": true,
+    "modulePathIgnorePatterns": [
+      "<rootDir>/dayTemplate/"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timvanschie1/advent-of-code-2021"
+  },
+  "author": "Tim van Schie",
+  "license": "ISC",
+  "homepage": "https://github.com/timvanschie1/advent-of-code-2021#readme"
+}
