@@ -10,9 +10,7 @@ function part2(data) {
         fishesPerAge[6] = fishesPerAge[6] + breedingFishes[0];
     }
 
-    // console.log('fishesPerAge', fishesPerAge);
-
-    return fishesPerAge.reduce((fishes, currentValue) => currentValue + fishes, 0);
+    return fishesPerAge.reduce((currentValue, fishes) => currentValue + fishes, 0);
 }
 
 module.exports = part2;
