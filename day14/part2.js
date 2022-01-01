@@ -4,37 +4,55 @@ function part2(data) {
         .split("\n")
         .map(rule => rule.split(' -> '))
 
-    let polymer = template;
-    for (let i = 1; i <= 10; i++) {
-        for (const [pair, insertion] of pairInsertionRules) {
-            const insertionRuleRegex = new RegExp(pair, "g");
-            polymer = polymer.replace(insertionRuleRegex, pair[0] + insertion.toLowerCase() + pair[1]); // Temp use lowercase for insertion, so it's ignored during this step.
+    let combiCounts = {};
+    pairInsertionRules.forEach(([combi]) => {
+        combiCounts[combi] = template.split(combi).length - 1;
+    });
+
+    const allChars = []
+    pairInsertionRules.forEach(([pair]) => allChars.push(pair[0], pair[1]));
+    const uniqueChars = [...new Set(allChars)];
+
+    const charCounts = {};
+    uniqueChars.forEach(char => charCounts[char] = 0);
+    template.split('').forEach(char => charCounts[char]++);
+
+    for (let i = 1; i <= 40; i++) {
+        let newCombiCounts = {...combiCounts};
+
+        for (const combi in combiCounts) {
+            const oldCombiCount = combiCounts[combi];
+            const [_, charToInsert] = pairInsertionRules.find(rule => rule[0] === combi);
+            const newCombiOne = combi[0] + charToInsert;
+            const newCombiTwo = charToInsert + combi[1];
+
+            newCombiCounts[combi] = newCombiCounts[combi] - oldCombiCount; // Old combi is removed, since a char is inserted between the two current chars and thereby the combi doesn't exist anymore
+            newCombiCounts[newCombiOne] = newCombiCounts[newCombiOne] + oldCombiCount;
+            newCombiCounts[newCombiTwo] = newCombiCounts[newCombiTwo] + oldCombiCount;
+
+            charCounts[charToInsert] = charCounts[charToInsert] + oldCombiCount;
         }
 
-        polymer = polymer.toUpperCase();
+        combiCounts = {...newCombiCounts};
     }
 
-    let mostOccurences;
-    let leastOccurences;
+    let mostOccurrences;
+    let leastOccurrences;
+    for (const combi in charCounts) {
+        const occurrences = charCounts[combi];
+        const theMost = !mostOccurrences || occurrences > mostOccurrences;
+        const theLeast = !leastOccurrences || occurrences < leastOccurrences;
 
-    const uniqueChars = [...new Set(polymer.split(''))];
-    for (const char of uniqueChars) {
-        const occurences = polymer.split(char).length - 1;
-        const mostOccurrences = mostOccurences && occurences > mostOccurences;
-        const leastOccurrences = leastOccurences && occurences < leastOccurences;
-
-        if (!mostOccurences || mostOccurrences) {
-            mostOccurences = occurences;
-            continue;
+        if (theMost) {
+            mostOccurrences = occurrences;
         }
 
-        if (!leastOccurences || leastOccurrences) {
-            leastOccurences = occurences;
+        if (theLeast) {
+            leastOccurrences = occurrences;
         }
     }
 
-    console.log(polymer);
-    return mostOccurences - leastOccurences;
+    return mostOccurrences - leastOccurrences;
 }
 
 module.exports = part2;
